@@ -10,8 +10,9 @@
 	</parent>
 	<groupId>com.ecommerce</groupId>
 	<artifactId>onlineshop</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0</version>
 	<name>onlineshop</name>
+	<packaging>jar</packaging>
 	<description>Spring Boot Project for e Commerce App</description>
 	<properties>
 		<java.version>1.8</java.version>
