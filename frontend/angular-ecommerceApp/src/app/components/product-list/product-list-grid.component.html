@@ -1,7 +1,7 @@
 <div class="main-content">
     <div class="section-content section-conent-p30">
 
-        <h4> Category : {{currentCategoryName}}</h4>
+        <h4 *ngIf="!searchMode"> Category : {{currentCategoryName}}</h4>
         <div class="container-fluid">
             <div class="row">
 
