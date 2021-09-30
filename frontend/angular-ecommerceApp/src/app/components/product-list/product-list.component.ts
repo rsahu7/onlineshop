@@ -10,10 +10,16 @@ import { ProductService } from 'src/app/services/product.service';
 })
 export class ProductListComponent implements OnInit {
 
-  products: Product[];
-  currentCategoryId: number;
+  products: Product[] = [];
+  currentCategoryId: number = 1;
   currentCategoryName: string;
   searchMode: boolean;
+  previousCategoryId: number = 1;
+  previousKeyword: string;
+
+  pageNumber: number = 1;
+  pageSize: number = 5;
+  totalElements: number = 0;
 
   constructor(private productService: ProductService,
               private route: ActivatedRoute) { }
@@ -49,22 +55,47 @@ export class ProductListComponent implements OnInit {
        this.currentCategoryId = 1;
        this.currentCategoryName = "Books";
      }
+
+     if (this.currentCategoryId != this.previousCategoryId) {
+       this.pageNumber = 1;
+     }
+     this.previousCategoryId = this.currentCategoryId;
  
-     this.productService.getProductLists(this.currentCategoryId  ).subscribe(
-       data => {
-         this.products = data;
-       }
-     );   
+     this.productService.getProductListsPaginate(this.currentCategoryId, 
+                                        this.pageNumber-1, 
+                                        this.pageSize).subscribe(this.processResponse());   
   }
 
   handleSearchProducts() {
     const theKeyword: string = this.route.snapshot.paramMap.get('keyword')!;
 
-    this.productService.searchProducts(theKeyword).subscribe(
-      data => {
-        this.products = data;
-      }
-    );
+    if (this.previousKeyword != theKeyword) {
+      this.pageNumber = 1;
+    }
+    this.previousKeyword = theKeyword;
+
+    this.productService.searchProductsPaginate(theKeyword, 
+                                              this.pageNumber-1, 
+                                              this.pageSize).subscribe(this.processResponse());
+  }
+
+  processResponse() {
+    return (data:any) => {
+      this.products = data._embedded.products;
+      this.pageNumber = data.page.number + 1;
+      this.pageSize = data.page.size;
+      this.totalElements = data.page.totalElements;
+    }
+  }
+
+  updatePageSize(pageSize: number) {
+    this.pageSize = pageSize;
+    this.pageNumber = 1;
+    this.listProducts();
+  }
+
+  addToCart(theProduct: Product) {
+    console.log(`${theProduct.name} - ${theProduct.unitPrice}`);
   }
 
 }
