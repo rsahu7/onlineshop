@@ -1,3 +1,4 @@
+import { templateJitUrl } from '@angular/compiler';
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { CartItem } from '../common/cart-item';
@@ -61,6 +62,27 @@ export class CartService {
     console.log('--------------');
     console.log(`Total Quantity : ${totalQuantityValue}, Total Price : ${totalPriceValue}`);
     console.log('--------------');
+  }
+
+  decrementQuantity(theCartItem: CartItem) {
+    theCartItem.quantity--;
+    
+    if (theCartItem.quantity == 0) {
+      this.remove(theCartItem);
+    }
+    else {
+      this.computerCartTotals();
+    }
+
+  }
+  remove(theCartItem: CartItem) {
+    
+    const itemIndex = this.cartItems.findIndex(tempCartItem => theCartItem.id === tempCartItem.id);
+    
+    if(itemIndex > -1) {
+      this.cartItems.splice(itemIndex, 1);
+      this.computerCartTotals();
+    }
   }
 
 
