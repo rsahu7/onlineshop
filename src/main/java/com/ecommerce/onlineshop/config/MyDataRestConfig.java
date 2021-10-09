@@ -14,8 +14,10 @@ import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
+import com.ecommerce.onlineshop.entity.Country;
 import com.ecommerce.onlineshop.entity.Product;
 import com.ecommerce.onlineshop.entity.ProductCategory;
+import com.ecommerce.onlineshop.entity.State;
 
 @Configuration
 public class MyDataRestConfig implements RepositoryRestConfigurer {
@@ -32,20 +34,23 @@ public class MyDataRestConfig implements RepositoryRestConfigurer {
 	public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config, CorsRegistry cors) {
 		HttpMethod[] theUnSupportedMethods = {HttpMethod.PUT, HttpMethod.POST, HttpMethod.DELETE};
 		
-		config.getExposureConfiguration()
-			.forDomainType(Product.class)
-			.withCollectionExposure((metadata, httpMethods) -> httpMethods.disable(theUnSupportedMethods))
-			.withItemExposure((metadata, httpMethods) -> httpMethods.disable(theUnSupportedMethods));
-
-		config.getExposureConfiguration()
-		.forDomainType(ProductCategory.class)
-		.withCollectionExposure((metadata, httpMethods) -> httpMethods.disable(theUnSupportedMethods))
-		.withItemExposure((metadata, httpMethods) -> httpMethods.disable(theUnSupportedMethods));	
-		
+		disableHttpMethods(Product.class, config, theUnSupportedMethods);
+		disableHttpMethods(ProductCategory.class, config, theUnSupportedMethods);
+		disableHttpMethods(Country.class, config, theUnSupportedMethods);
+		disableHttpMethods(State.class, config, theUnSupportedMethods);
+	
 		exposeId(config);
 		//config.exposeIdsFor(Product.class, ProductCategory.class);
 
 		
+	}
+
+	private void disableHttpMethods(Class theClass, RepositoryRestConfiguration config, HttpMethod[] theUnSupportedMethods) {
+		
+		config.getExposureConfiguration()
+			.forDomainType(Product.class)
+			.withCollectionExposure((metadata, httpMethods) -> httpMethods.disable(theUnSupportedMethods))
+			.withItemExposure((metadata, httpMethods) -> httpMethods.disable(theUnSupportedMethods));
 	}
 	
 

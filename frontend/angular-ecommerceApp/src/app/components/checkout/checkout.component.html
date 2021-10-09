@@ -9,6 +9,17 @@
                         <div class="col-md-9">
                             <div class="input-space">
                                 <input formControlName="firstName" type="text">
+
+                                <div *ngIf="firstName?.invalid
+                                     && (firstName?.dirty || firstName?.touched)" 
+                                     class="alert alert-danger mt-1">
+                                    <div *ngIf="firstName?.errors?.required">
+                                        First Name is required
+                                    </div>
+                                    <div *ngIf="firstName?.errors?.minlength">
+                                        First Name must be atleast 2 character long
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -17,6 +28,14 @@
                         <div class="col-md-9">
                             <div class="input-space">
                                 <input formControlName="lastName" type="text">
+                                <div *ngIf="lastName?.invalid && (lastName!.dirty || lastName!.touched)" class="alert alert-danger mt-1">
+                                    <div *ngIf="lastName!.errors!.required">
+                                        Last Name is required
+                                    </div>
+                                    <div *ngIf="lastName!.errors!.minlength">
+                                        Last Name must be atleast 2 character long
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -25,6 +44,14 @@
                         <div class="col-md-9">
                             <div class="input-space">
                                 <input formControlName="email" type="text">
+                                <div *ngIf="email?.invalid && (email!.dirty || email!.touched)" class="alert alert-danger mt-1">
+                                    <div *ngIf="email!.errors!.required">
+                                        email is required
+                                    </div>
+                                    <div *ngIf="email!.errors!.pattern">
+                                        Incorrect email format
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>                                        
@@ -37,8 +64,10 @@
                         <div class="col-md-2"><label>Country</label></div>
                         <div class="col-md-9">
                             <div class="input-space">
-                                <select formControlName="country">
-                                    <option>TO DO</option>
+                                <select formControlName="country" (change)="getStates('shippingAddress')">
+                                    <option *ngFor="let tempCountry of countries" [ngValue]="tempCountry">
+                                        {{tempCountry.name}}    
+                                    </option>
                                 </select>
                             </div>
                         </div>
@@ -64,7 +93,9 @@
                         <div class="col-md-9">
                             <div class="input-space">
                                 <select formControlName="state">
-                                    <option>TO DO</option>
+                                    <option *ngFor="let tempState of shippingAddressStates" [ngValue]="tempState">
+                                        {{tempState.name}}
+                                    </option>
                                 </select>
                             </div>
                         </div>
@@ -93,8 +124,10 @@
                         <div class="col-md-2"><label>Country</label></div>
                         <div class="col-md-9">
                             <div class="input-space">
-                                <select formControlName="country">
-                                    <option>TO DO</option>
+                                <select formControlName="country" (change)="getStates('billingAddress')">
+                                    <option *ngFor="let tempCountry of countries" [ngValue]="tempCountry">
+                                        {{tempCountry.name}}    
+                                    </option>
                                 </select>
                             </div>
                         </div>
@@ -120,7 +153,9 @@
                         <div class="col-md-9">
                             <div class="input-space">
                                 <select formControlName="state">
-                                    <option>TO DO</option>
+                                    <option *ngFor="let tempState of billingAddressStates" [ngValue]="tempState">
+                                        {{tempState.name}}
+                                    </option>
                                 </select>
                             </div>
                         </div>
@@ -177,7 +212,9 @@
                         <div class="col-md-9">
                             <div class="input-space">
                                 <select formControlName="expirationMonth">
-                                    <option>TO DO</option>
+                                    <option *ngFor="let theMonth of creditCardMonths ">
+                                        {{theMonth}}
+                                    </option>
                                 </select>
                             </div>
                         </div>
@@ -186,8 +223,10 @@
                         <div class="col-md-2"><label>Expiry Year</label></div>
                         <div class="col-md-9">
                             <div class="input-space">
-                                <select formControlName="expirationYear">
-                                    <option>TO DO</option>
+                                <select formControlName="expirationYear" (change)="handleYearsAndMonths()">
+                                    <option *ngFor="let theYear of creditCardYears">
+                                        {{theYear}}
+                                    </option>
                                 </select>
                             </div>
                         </div>
