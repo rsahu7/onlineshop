@@ -25,7 +25,17 @@ export class LoginStatusComponent implements OnInit {
     );
   }
   getUserDetails() {
-    //throw new Error('Method not implemented.');
+    if (this.isAuthenticated) {
+        this.oktaAuth.getUser().then(
+          (res) => {
+          this.fullUserName = res.name!;
+          }
+        );
+    }
+  }
+
+  logout() {
+    this.oktaAuth.signOut();
   }
 
 }
