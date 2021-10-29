@@ -1,0 +1,1 @@
+declare module '@okta/okta-sigin-widget';

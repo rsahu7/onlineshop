@@ -5,7 +5,7 @@ import { AppComponent } from './app.component';
 import { ProductListComponent } from './components/product-list/product-list.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ProductService } from './services/product.service';
-import { Route, RouterModule } from '@angular/router';
+import { Route, Router, RouterModule } from '@angular/router';
 import { ProductCategoryMenuComponent } from './components/product-category-menu/product-category-menu.component';
 import { SearchComponent } from './components/search/search.component';
 import { ProductDetailsComponent } from './components/product-details/product-details.component';
@@ -15,6 +15,25 @@ import { CartDetailsComponent } from './components/cart-details/cart-details.com
 import { CheckoutComponent } from './components/checkout/checkout.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from './components/login/login.component';
+import { OktaAuth } from '@okta/okta-auth-js';
+import myAppConfig from './config/my-app-config';
+
+import {
+  OKTA_CONFIG,
+  OktaAuthModule,
+  OktaCallbackComponent
+} from '@okta/okta-angular';
+import { LoginStatusComponent } from './components/login-status/login-status.component';
+
+const oktaConfig = Object.assign({
+  onAuthRequired: (injector: { get: (arg0: typeof Router) => any; }) => {
+    const router = injector.get(Router);
+      // Redirect the user to your custom login page
+        router.navigate(['/login']);
+      }
+    }, myAppConfig.oidc);
+const oktaAuth = new OktaAuth(oktaConfig);
+
 
 const routes: Route[] = [
   {path: 'checkout', component: CheckoutComponent},
@@ -38,7 +57,8 @@ const routes: Route[] = [
     CartStatusComponent,
     CartDetailsComponent,
     CheckoutComponent,
-    LoginComponent
+    LoginComponent,
+    LoginStatusComponent
   ],
   imports: [
     BrowserModule,
@@ -47,7 +67,7 @@ const routes: Route[] = [
     NgbModule,
     ReactiveFormsModule
   ],
-  providers: [ProductService],
+  providers: [ProductService, { provide: OKTA_CONFIG, useValue: {oktaAuth} }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
