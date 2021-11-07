@@ -15,32 +15,34 @@ import { CartDetailsComponent } from './components/cart-details/cart-details.com
 import { CheckoutComponent } from './components/checkout/checkout.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from './components/login/login.component';
-import { OktaAuth } from '@okta/okta-auth-js';
+//import { OktaAuth } from '@okta/okta-auth-js';
+
 import myAppConfig from './config/my-app-config';
 
-import {
-  OKTA_CONFIG,
-  OktaAuthModule,
-  OktaCallbackComponent,
-  OktaAuthGuard
-} from '@okta/okta-angular';
+// import {
+//   OKTA_CONFIG,
+//   OktaAuthModule,
+//   OktaCallbackComponent,
+//   OktaAuthGuard
+//   OktaAuthStateService
+// } from '@okta/okta-angular';
 
 import { LoginStatusComponent } from './components/login-status/login-status.component';
 import { MemberPageComponent } from './components/member-page/member-page.component';
 
-const oktaConfig = Object.assign({
-  onAuthRequired: (oktaAuth: any, injector: { get: (arg0: typeof Router) => any; }) => {
-    const router = injector.get(Router);
-      // Redirect the user to your custom login page
-        router.navigate(['/login']);
-      }
-    }, myAppConfig.oidc);
-const oktaAuth = new OktaAuth(oktaConfig);
+// const oktaConfig = Object.assign({
+//   onAuthRequired:  (injector:any) => {
+//     const router = injector.get(Router);
+//       // Redirect the user to your custom login page
+//         router.navigate(['/login']);
+//       }
+//     }, myAppConfig.oidc);
+//const oktaAuth = new OktaAuth(oktaConfig);
 
 
 const routes: Route[] = [
-  {path: 'members', component: MemberPageComponent, canActivate: [OktaAuthGuard]},
-  {path: 'login/callback', component: OktaCallbackComponent},
+  //{path: 'members', component: MemberPageComponent, canActivate: [OktaAuthGuard]},
+  //{path: 'login/callback', component: OktaCallbackComponent},
   {path: 'login', component: LoginComponent},
   {path: 'checkout', component: CheckoutComponent},
   {path: 'cart-details', component: CartDetailsComponent},
@@ -74,7 +76,7 @@ const routes: Route[] = [
     NgbModule,
     ReactiveFormsModule
   ],
-  providers: [ProductService, { provide: OKTA_CONFIG, useValue: {oktaAuth} }],
+  providers: [ProductService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
